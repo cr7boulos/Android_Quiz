@@ -84,7 +84,6 @@ namespace Game
             if(questionArrayIndex < QuestionArray.Length)
                 Question.text = QuestionArray[questionArrayIndex++];         
             CorrectAnswerLocation = Answer_Randomizer();
-           
         }
 
         // Update is called once per frame
