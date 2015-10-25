@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System;
 using Game;
 using UnityEngine.UI;
@@ -12,7 +11,7 @@ namespace Scoring
     {
 
         private int correctAns;
-
+        public Text win;
         const int YPOS_PLAYER_POINTS = -76;
         const int YPOS_PLAYER_NAMES = -125;
         public Text[] PlayerPoints = new Text[4];
@@ -42,7 +41,9 @@ namespace Scoring
 
             if (endOfQuiz(GameLogic.GetQuestionArrayIndex()))
             {
-                StartCoroutine(QuizSelect.Timer(QuizSelect.TRANSITION, "Choose_Quiz"));
+                win.enabled = true;
+                win.text = winner(scoreCard);
+                StartCoroutine(QuizSelect.Timer(QuizSelect.TRANSITION * 10, "Choose_Quiz"));
             }
             //makes sure there is another question in the array before proceding
             else if (GameLogic.GetQuestionArrayIndex() < GameLogic.GetQuestionArrayLength())
@@ -151,6 +152,7 @@ namespace Scoring
 
         private void SetVariables()
         {
+            win.enabled = false;
             foreach (Image im in PlayerNames)
                 im.enabled = false;
             foreach (Text txt in PlayerPoints)
@@ -176,23 +178,25 @@ namespace Scoring
         {
             int max = (Math.Max(scores[0], scores[1]) > Math.Max(scores[2], scores[3])) ? Math.Max(scores[0], scores[1]) : Math.Max(scores[2], scores[3]);
             int ties = -1;
+            string tie = "Draw between ";
             for (int i = 0; i < 4; i++)
             {
                 if (scores[i] == max)
                 {
                     ties++;
+                    tie += "Player " + i + " ";
                 }
             }
             for (int i = 0; i < 4; i++ )
             {
                 if( ties > 0)
                 {
-                    return "Draw";
+                    return tie;
                 }
                 else if (scores[i] == max)
                 {  
                     // add one to i so the player number is correct
-                    return "Congradulations, Player" + (i + 1) + ", you won!";
+                    return "Congradulations Player" + (i + 1) + ", you won!";
                 }
             }
             return "Error";
